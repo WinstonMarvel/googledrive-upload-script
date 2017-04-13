@@ -1,0 +1,55 @@
+<script>
+
+ var file, 
+      reader = new FileReader();
+ 
+  // Upload the file to Google Drive
+  reader.onloadend = function(e) {
+    google.script.run
+      .withSuccessHandler(showMessage)
+      .uploadFileToGoogleDrive(
+         e.target.result, file.name, 
+         $('input#name').val(), 
+         $('input#taskid').val()
+      );
+  };
+ 
+
+
+// Read the file on form submit
+  function submitForm() {
+   //$date = $.datepicker.formatDate('yy/mm/dd', new Date());
+    //spreadsheet
+   // var combine=$('input#name').val()+" "+$('input#email').val();
+    
+    var date= Date();
+    
+    var completionstatus;
+    if(document.getElementById("projstatus").checked==true){
+    completionstatus="Complete";} else{completionstatus="-";}
+
+    
+    google.script.run.withSuccessHandler(showMessage).writeToDatabase( date, $('input#name').val(),$('input#email').val(),$('input#taskid').val(),$('textarea#notes').val(),completionstatus);
+  
+    file = $('#file')[0].files[0];
+    showMessage("Uploading file..");
+    reader.readAsDataURL(file);
+    
+    
+    
+  }
+ 
+// Displays Success Message
+  function showMessage(e) {
+    $('#progress').html(e);
+  }
+ 
+//shows File uploaded 
+function showfile(){
+
+$('#filename').html($('#file').val());
+
+}
+
+
+</script>
